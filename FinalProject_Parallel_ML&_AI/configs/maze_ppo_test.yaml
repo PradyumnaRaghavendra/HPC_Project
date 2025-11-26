@@ -1,0 +1,56 @@
+# PPO Test on SimpleMaze - Following RAGEN Paper Specifications
+# Testing if PPO (with trained critic) works better than A*-PO
+
+model:
+  name: "Qwen/Qwen2.5-0.5B-Instruct"
+  ref_model: "Qwen/Qwen2.5-0.5B-Instruct"
+  max_length: 512
+  sft_max_length: 256
+  device: "cuda"  # GPU training
+
+# RAGEN paper PPO settings
+trainer:
+  type: "ppo"  # Use PPO instead of A*-PO
+
+ppo:
+  # RAGEN paper specifications
+  learning_rate: 0.00001  # 1e-5 (same as A*-PO for fair comparison)
+  clip_epsilon: 0.2  # Standard PPO clipping
+  value_loss_coef: 0.5  # Value function loss weight
+  entropy_coef: 0.001  # β=0.001 (RAGEN paper)
+  max_grad_norm: 1.0  # Gradient clipping
+
+  # GAE parameters (RAGEN paper: γ=1.0, λ=1.0)
+  gamma: 1.0  # Discount factor
+  gae_lambda: 1.0  # GAE lambda
+
+sampling:
+  temperature: 0.8
+  top_p: 0.9
+  top_k: 0
+
+training:
+  num_epochs: 1
+  max_steps: 50  # Extended from 20 to 50 to see stability
+  eval_every: 10
+  save_every: 100
+
+environment:
+  type: "maze"
+  max_turns: 20
+
+curriculum:
+  enabled: false
+
+data:
+  train_size: 10
+  eval_size: 5
+
+logging:
+  use_wandb: false
+  log_every: 2
+
+seed: 42
+
+uncertainty_filtering:
+  enabled: false

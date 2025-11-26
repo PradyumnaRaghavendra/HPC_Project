@@ -1,0 +1,38 @@
+# Default configuration for RAGEN training on WebShop
+
+# Environment settings
+environment:
+  num_products: 100  # 100, 1000, or 'all'
+  max_steps: 20      # Maximum steps per episode
+
+# Model settings
+model:
+  name: "Qwen/Qwen2.5-3B-Instruct"
+  max_length: 512
+
+# Training hyperparameters
+training:
+  num_iterations: 500
+  episodes_per_iteration: 4
+  ppo_epochs: 3
+  gamma: 0.99
+  
+  # Learning rates
+  policy_lr: 1.0e-5
+  value_lr: 3.0e-5
+  
+  # PPO parameters
+  clip_epsilon: 0.2
+  kl_coeff: 0.1
+  entropy_coeff: 0.01
+  max_grad_norm: 1.0
+  
+  # Sampling
+  temperature: 1.0
+
+# Logging and checkpointing
+logging:
+  log_dir: "logs"
+  checkpoint_dir: "checkpoints"
+  eval_frequency: 10
+  save_frequency: 50
